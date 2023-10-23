@@ -17,4 +17,16 @@ export class PrintersService {
   async findAll(): Promise<Printer[]> {
     return this.PrinterModel.find().exec();
   }
+
+  async searchByKeyword(
+    keyword: string,
+    skip: number,
+    pageSize: number,
+  ): Promise<Printer[]> {
+    const regex = new RegExp(keyword, 'i');
+    return this.PrinterModel.find({ name: { $regex: regex } })
+      .skip(skip) // 跳过前面的条目
+      .limit(pageSize) // 限制返回的数量
+      .exec();
+  }
 }
